@@ -1,0 +1,26 @@
+{
+  "name": "how-to-use-mongoDB-in-Node.js",
+  "version": "1.0.0",
+  "description": "启动mongoDB C:\\Program Files\\MongoDB 2.6 Standard\\bin 执行：.\\mongod.exe --dbpath=\"d:\\Mongodb\\data\"  --logpath=\"d:\\Mongodb\\log\\mongodb.log",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^1.5.2",
+    "mongo": "^0.1.0",
+    "mongodb": "^1.4.34",
+    "mongoose": "4.3.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhangmingkai4315/how-to-use-mongoDB-in-Node.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhangmingkai4315/how-to-use-mongoDB-in-Node.js/issues"
+  },
+  "homepage": "https://github.com/zhangmingkai4315/how-to-use-mongoDB-in-Node.js"
+}

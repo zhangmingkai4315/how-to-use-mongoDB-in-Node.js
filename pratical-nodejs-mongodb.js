@@ -1,15 +1,29 @@
-
-// import async to make control flow simplier
 var async = require('async');
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
+var PersonSchema = new Schema({
+    name: String,
+    age: Number,
+    birthday: Date
+  });
 
-// import the rest of the normal stuff
-var mongoose = require('../../lib');
+PersonSchema.pre('save',function(next){
+	console.log('Will Save the Doc');
+	return next();
+});
+PersonSchema.pre('remove',function(next){
+	console.log('Will remove the Doc');
+	return next();
+});
 
-require('./person.js')();
+PersonSchema.method({
+	show:function(slog){
+		console.log(slog+" : "+this.name+" : "+ this.age)
+	}
+});
 
-var Person = mongoose.model('Person');
 
-// define some dummy data
+var Person = mongoose.model('Person',PersonSchema);
 var data = [
     {
       name: 'bill',
@@ -39,7 +53,7 @@ var data = [
 ];
 
 
-mongoose.connect('mongodb://localhost/persons', function(err) {
+mongoose.connect('mongodb://localhost/TestPersons', function(err) {
   if (err) throw err;
 
   // create all of the dummy people
@@ -47,10 +61,9 @@ mongoose.connect('mongodb://localhost/persons', function(err) {
     Person.create(item, cb);
   }, function(err) {
     if (err) {
-        // handle error
+        console.log(err);
     }
 
-      // create a promise (get one from the query builder)
     var prom = Person.find({age : { $lt : 1000 }}).exec();
 
       // add a callback on the promise. This will be called on both error and
@@ -59,13 +72,7 @@ mongoose.connect('mongodb://localhost/persons', function(err) {
 
       // add a callback that is only called on complete (success) events
     prom.addCallback(function() { console.log("Successful Completion!"); });
-
-      // add a callback that is only called on err (rejected) events
     prom.addErrback(function() { console.log("Fail Boat"); });
-
-      // you can chain things just like in the promise/A+ spec
-      // note: each then() is returning a new promise, so the above methods
-      // that we defined will all fire after the initial promise is fulfilled
     prom.then(function(people) {
 
         // just getting the stuff for the next query
@@ -77,12 +84,15 @@ mongoose.connect('mongodb://localhost/persons', function(err) {
       return Person.find({ _id : { $nin : ids }}).exec();
     }).then(function(oldest) {
       console.log("Oldest person is: %s", oldest);
+      return Person.remove(oldest).exec();
     }).then(cleanup);
   });
 });
 
 function cleanup() {
-  Person.remove(function() {
+ 
     mongoose.disconnect();
-  });
+
 }
+
+
